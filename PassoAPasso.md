@@ -12,7 +12,7 @@ O presente artigo expõe o desenvolvimento de uma API Rest que fornece um sistem
 2. Entra-se na pasta deseja e executa-se os seguintes comandos:
 
 ```bash
-dotnet new webapi -o APICartao #Irá criar a aplicação 
+dotnet new webapi -o APICartao #Irá criar a aplicação
 cd APICartao #Irá para a pasta da aplicação criada
 dotnet add package Microsoft.EntityFrameworkCore.InMemory #Irá adicionar o framework Entity a aplicação
 code -r ../APICartao #Irá abrir o programa no VS Code
@@ -24,7 +24,7 @@ code -r ../APICartao #Irá abrir o programa no VS Code
 
 É necessária a criação de Certificado de desenvolvimento HTTPS (*HTTPS development certificate*) e que o mesmo seja confiado pelo sistema operacional. Isso varia de acordo com o sistema operacional e está bem explicado em [Microsoft](https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-5.0&tabs=visual-studio#ssl-linux).
 
-## 3 - **Mudar o *launchURL*** 
+## 3 - **Mudar o *launchURL***
 
 Em `Properties\launchSettings.json` altere `launchUrl` de `swagger` para `api/APICartao`. Isso irá mudar a URL de acesso.
 
@@ -83,14 +83,14 @@ namespace APICartao.Models
             }
 
             this.Cartao = cartao;
-            
+
         }
 
     }
 }
 ```
 
- 
+
 
 ## 6 - **Adicionar uma *database context***
 
@@ -142,7 +142,7 @@ namespace APICartao
         {
             services.AddDbContext<CartaoContext>(opt => opt.UseInMemoryDatabase("CartaoList")); //especifica que o database context será utilizado em uma base de dados na memória
             services.AddControllers();
-        
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -151,7 +151,7 @@ namespace APICartao
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            
+
             }
 
             app.UseHttpsRedirection();
@@ -184,7 +184,7 @@ dotnet aspnet-codegenerator controller -name CartaoItemsController -async -api -
 
 Através desses comandos cria-se a classe `CartaoItemsController`, que permite ao programa responser aos *requests* do web API. Esse código usa o DI para injetar o *database context* (CartaoContext) dentro do controlador, para assim permitir que o controlador faça uso dos métodos CRUD.
 
-## 9 - **Atualize os métodos do Controlador **
+## 9 - **Atualize os métodos do Controlador**
 
 Apenas 3 métodos são utilizados nessa API:
 
@@ -215,7 +215,7 @@ namespace APICartao.Controllers
         {
             _context = context;
         }
-		
+
         //Método para retornar o número do cartão após o POST request
         // GET: api/CartaoItems/id/5
         [HttpGet("id/{id}")]
@@ -230,7 +230,7 @@ namespace APICartao.Controllers
 
             return cartaoItem;
         }
-		
+
         //Método para retornar a lista de cartões para um certo email
         // GET: api/CartaoItems/email/exemple@exemple.com
         [HttpGet("email/{Email}")]
@@ -254,7 +254,7 @@ namespace APICartao.Controllers
         public async Task<ActionResult<CartaoItem>> PostCartaoItem(CartaoItem cartaoItem)
         {
             cartaoItem.criarCartao(); //Cria o o cartão aleatório
-            
+
             _context.CartaoItems.Add(cartaoItem); //Adiciona esse novo cartão
             await _context.SaveChangesAsync();
 
@@ -266,7 +266,7 @@ namespace APICartao.Controllers
 
 ```
 
-## 10 - Exemplo de funcionamento dessa API
+## 10 - Exemplo do funcionamento dessa API
 
 1. Através de um POST Request para a URL https://localhost:5001/api/CartaoItems se envia um arquivo JSON contendo o email do usuário:
 
@@ -286,7 +286,7 @@ namespace APICartao.Controllers
 }
 ```
 
-3. Para se testar o *endpoint* da lista de emails, o passo 1 foi repetido diversas vezes alterando-se o email algumas vezes. 
+3. Para se testar o *endpoint* da lista de emails, o passo 1 foi repetido diversas vezes alterando-se o email algumas vezes.
 
 4. Então um GET Request é feito para URL https://localhost:5001/api/CartaoItems/email/email@email.com retornando:
 
